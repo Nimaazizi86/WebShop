@@ -25,6 +25,14 @@
                 $scope.store = response.data;
                 $scope.message = "Products List"
             });
+        
+        $http.get("/Admin/AjaxThatReturnsAdmin")
+        .then(function (response) {
+            $scope.role = response.data;
+            console.log($scope.role);
+
+        });
+
         $scope.AddToCart = function (Id) {
             $http.get("../Home/AjaxThatReturnsJsonTotal/" + Id)
                  .then(function (response) {
@@ -32,6 +40,36 @@
                  })
         }
     });
+
+
+    Demo.controller("EditController", function ($scope, $http, $location, $routeParams) {
+        $scope.params = $routeParams;
+        $http.get("Home/AjaxThatReturnsJsonItem/" + $scope.params.Id)
+           .then(function (response) {
+               $scope.detailToEdit = response.data;
+           })
+
+        $scope.sendform = function () {
+            alert('saving changes...');
+            console.log($scope.detailToEdit);
+            $http({
+                method: "POST",
+                url: "../home/Edit",
+                data: $scope.detailToEdit
+            })
+                   .success(function (data) {
+                       if (data.errors) {
+                           console.log(data.errors)
+                       } else {
+                           alert("edited successfully");
+                       }
+                       $location.url('/Store')
+                   })
+        }
+    })
+
+    
+
     Demo.controller('checkOutController', function ($scope, $http, $rootScope, $location) {
         $http.get("Home/AjaxThatReturnsJsonCartList")
            .then(function (response) {
@@ -71,9 +109,14 @@
             }).
 
 
-            when("/addItem/:ID", {
-                templateUrl: "/partials/store.html",
-                controller: "AddItemController"
+            //when("/addItem/:ID", {
+            //    templateUrl: "/partials/store.html",
+            //    controller: "AddItemController"
+            //}).
+
+            when("/edit/:ID", {
+                templateUrl: "/partials/edit.html",
+                controller: "EditController"
             }).
 
             otherwise({

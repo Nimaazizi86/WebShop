@@ -19,6 +19,18 @@
                 <p>items selcted: {{order.getQuantity}}</p>
                 <p>Total cost: {{order.getCost | currency}}</p>
                 <a href="/#checkOut">checkout</a>
+                
+
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <br />
+                        <br />
+                        <button href="/#addItem">Add new item</button>
+                    }
+                    else
+                    {
+                        <p>Admin is not loged in</p>
+                    }
 
             </td>
         </tr>

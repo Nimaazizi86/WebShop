@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -23,6 +24,21 @@ namespace WebShopV1.Controllers
 
             return Json(storeInfo, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult AjaxThatReturnsJsonItem(int? Id)
+        {
+            object itemInfo = null;
+
+            itemInfo = db.Products.Single(p => p.Id == Id);
+
+            if (itemInfo == null)
+            {
+                itemInfo = new { ID = 0, name = "Not", cost = "Found" };
+            }
+
+            return Json(itemInfo, JsonRequestBehavior.AllowGet);
+        }
+
 
         public JsonResult AjaxThatReturnsJsonTotal(int? Id)
         {
@@ -107,6 +123,17 @@ namespace WebShopV1.Controllers
                 return Json(new { getQuantity, getCost }, JsonRequestBehavior.AllowGet);
 
             }
+        }
+
+        public ActionResult Edit([Bind(Include = "Id,name,cost,description,quantity")] Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
 
 

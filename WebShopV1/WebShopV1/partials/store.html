@@ -18,10 +18,18 @@
         <td>{{ item.description }}</td>
 
         <td>
-            <button ng-click="AddToCart(item.Id)">Add to cart</button>
-        </td>
-    </tr>
+            <button ng-click="AddToCart(item.Id)" class="btn-success">Add to cart</button>  
 
+            <a ng-show="role=='SuperAdmin'" type="button" href="/#edit/{{ item.Id }}" class="btn btn-info">Edit Item</a>
+            <button ng-show="role=='SuperAdmin'" class="btn-danger">Delete Item</button>
+
+        </td>
+
+    </tr>
+    
 </table>
+
 <p>items selcted: {{order.getQuantity}}</p>
 <p>Total cost: {{order.getCost | currency}}</p>
+
+

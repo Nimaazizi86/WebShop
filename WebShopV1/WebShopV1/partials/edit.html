@@ -1,0 +1,51 @@
+﻿
+
+
+<form ng-app="Demo" ng-createController="validateCtrl"
+      name="myForm" novalidate ng-submit="sendform()">
+    <!--the only differnet between edit and create is we dont need to edit the id but we have to put it here bcoz we
+    have to send it to the method in order to find with peron has to be modified-->
+    <p>
+        ID:
+        <span ng-model="detailToEdit.Id">{{ detailToEdit.Id }}</span>
+    </p>
+
+    <p>
+        Name:<br>
+        <input type="text" name="name" ng-model="detailToEdit.name" ng-required="true" ng-maxlength="10">
+        <span style="color:red" ng-show="myForm.name.$dirty && myForm.name.$invalid">
+            <span ng-show="myForm.name.$error.required">name is required.</span>
+        </span>
+    </p>
+    <p>
+        Cost:<br>
+        <input type="number" value="cost" name="cost" ng-model="detailToEdit.cost" ng-required="true" ng-maxlength="10">
+        <span style="color:red" ng-show="myForm.cost.$dirty && myForm.cost.$invalid">
+            <span ng-show="myForm.cost.$error.required">cost is required.</span>
+        </span>
+    </p>
+   
+    <p>
+        Description:<br>
+        <input type="text" name="description" ng-model="detailToEdit.description" ng-required="true" ng-maxlength="100">
+        <span style="color:red" ng-show="myForm.description.$dirty && myForm.description.$invalid">
+            <span ng-show="myForm.description.$error.required">description is required.</span>
+        </span>
+    </p>
+
+    <p>
+        Name:<br>
+        <input type="number" name="quantity" ng-model="detailToEdit.quantity" ng-required="true" ng-maxlength="10">
+        <span style="color:red" ng-show="myForm.quantity.$dirty && myForm.quantity.$invalid">
+            <span ng-show="myForm.quantity.$error.required">quantity is required.</span>
+        </span>
+    </p>
+
+    <p>
+        <button type="submit"
+                ng-disabled="myForm.$invalid">
+            Save
+        </button>
+    </p>
+</form>
+<a href="#/Store">back to list</a>
