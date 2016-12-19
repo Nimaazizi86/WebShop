@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html ng-app="Demo">
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    @*<script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-route.min.js"></script>*@
+    @*<script src="~/js/app.js"></script>*@
+    @*<link href="css/style.css" rel="stylesheet" type="text/css" />*@
+</head>
+<body>
+    <table style="font-family:Arial">
+        <tr>
+            @*<td colspan="2" class="header">
+                <h1>Website Header</h1>
+
+            </td>*@
+            <td colspan="2" class="header">
+                <h1>cart</h1>
+                <p>items selcted: {{order.getQuantity}}</p>
+                <p>Total cost: {{order.getCost | currency}}</p>
+                <a href="/#checkOut">checkout</a>
+
+            </td>
+        </tr>
+
+        <tr>
+            
+            <td class="mainContent">
+                <ng-view></ng-view>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="footer">
+                <b>Website footer</b>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

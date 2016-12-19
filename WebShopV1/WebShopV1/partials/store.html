@@ -1,0 +1,27 @@
+﻿
+<h1>{{ message }}</h1>
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Cost</th>
+        <th>Quantity</th>
+        <th>Descriptyion</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="item in store">
+        <td>{{ item.Id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.cost }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.description }}</td>
+
+        <td>
+            <button ng-click="AddToCart(item.Id)">Add to cart</button>
+        </td>
+    </tr>
+
+</table>
+<p>items selcted: {{order.getQuantity}}</p>
+<p>Total cost: {{order.getCost | currency}}</p>

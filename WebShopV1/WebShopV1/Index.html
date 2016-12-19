@@ -1,0 +1,31 @@
+﻿<!doctype html>
+<html ng-app="AngularStore">
+<head>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.js"></script>
+    <!-- … -->
+    <!-- includes for the Angular Store app -->
+    <script src="js/app.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/product.js"></script>
+    <script src="js/shoppingBasket.js"></script>
+    <script src="js/store.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <h1 class="well">
+                    <a href="Index.html">
+                        <img src="img/logo.png" height="60" width="60" alt="logo" />
+                    </a>
+                    Angular Store
+                </h1>
+                <div ng-view></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
