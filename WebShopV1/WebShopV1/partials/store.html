@@ -1,8 +1,10 @@
 ﻿
 <h1>{{ message }}</h1>
-
+<a ng-show="role=='SuperAdmin'" role="button" href="/#create/{{ item.Id }}" class="btn btn-xs">Add new Item</a>
+<br />
 <table class="table">
     <tr>
+
         <th>Id</th>
         <th>Name</th>
         <th>Cost</th>
@@ -16,15 +18,14 @@
         <td>{{ item.cost }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.description }}</td>
-
         <td>
-            <button ng-click="AddToCart(item.Id)" class="btn-success">Add to cart</button>  
+            <a ng-click="AddToCart(item.Id)" role="button" class="btn btn-success" >Add to cart</a>  
+            <a ng-show="role=='SuperAdmin'" role="button" href="/#edit/{{ item.Id }}" class="btn btn-info">Edit Item</a>
+            <a ng-show="role=='SuperAdmin'" role="button" href="/#delete/{{ item.Id }}" class="btn btn-danger">Delete</a>
 
-            <a ng-show="role=='SuperAdmin'" type="button" href="/#edit/{{ item.Id }}" class="btn btn-info">Edit Item</a>
-            <button ng-show="role=='SuperAdmin'" class="btn-danger">Delete Item</button>
-
+            <!--<a ng-show="role=='SuperAdmin'" ng-click="DeleteItem(item.Id)" role="button" class="btn btn-danger">Delete</a>-->
+            <!--<button ng-show="role=='SuperAdmin'" class="btn-danger">Delete Item</button>-->
         </td>
-
     </tr>
     
 </table>

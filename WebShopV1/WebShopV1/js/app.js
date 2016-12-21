@@ -41,12 +41,50 @@
         }
     });
 
+    Demo.controller("CreateController", function ($scope, $http, $location) {
+        $scope.sendform = function () {
+            $http({
+                method: "POST",
+                url: "../home/NewItem",
+                data: $scope.form
+            })
+                   .success(function (data) {
+                       if (data.errors) {
+                           console.log(data.errors)
+                       } else {
+                           alert("Posted successfully");
+                       }
+                       $location.url('/list')
+                   })
+        }
+    })
 
+    Demo.controller("DeleteController", function ($scope, $http, $routeParams, $location, $rootScope) {
+        $scope.paramss = $routeParams;
+
+        $http.get("Home/AjaxThatReturnsJsonItem/" + $scope.paramss.Id)
+           .then(function (response) {
+               $scope.detail = response.data;
+               $scope.delmessage = "Confirm deleting"
+           });
+
+        $scope.DeleteItem = function (Id) {
+            $http.get("../Home/Delete/" + Id)
+                 .then(function (response) {
+                     $rootScope.order = response.data;
+                     $location.url('/store')
+                 })
+        }
+
+    })
+    
     Demo.controller("EditController", function ($scope, $http, $location, $routeParams) {
         $scope.params = $routeParams;
         $http.get("Home/AjaxThatReturnsJsonItem/" + $scope.params.Id)
            .then(function (response) {
                $scope.detailToEdit = response.data;
+               condole.log("detail:");
+               condole.log($scope.detailToEdit);
            })
 
         $scope.sendform = function () {
@@ -55,7 +93,9 @@
             $http({
                 method: "POST",
                 url: "../home/Edit",
+                //data: { 'Id': Id }
                 data: $scope.detailToEdit
+                //data: { 'Id': $scope.detailToEdit }
             })
                    .success(function (data) {
                        if (data.errors) {
@@ -66,9 +106,7 @@
                        $location.url('/Store')
                    })
         }
-    })
-
-    
+    })    
 
     Demo.controller('checkOutController', function ($scope, $http, $rootScope, $location) {
         $http.get("Home/AjaxThatReturnsJsonCartList")
@@ -114,9 +152,19 @@
             //    controller: "AddItemController"
             //}).
 
-            when("/edit/:ID", {
+            when("/edit/:Id", {
                 templateUrl: "/partials/edit.html",
                 controller: "EditController"
+            }).
+
+            when("/delete/:Id", {
+                templateUrl: "/partials/delete.html",
+                controller: "DeleteController"
+            }).
+
+            when("/create", {
+                templateUrl: "/partials/create.html",
+                controller: "CreateController"
             }).
 
             otherwise({

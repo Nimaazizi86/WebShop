@@ -5,6 +5,8 @@
       name="myForm" novalidate ng-submit="sendform()">
     <!--the only differnet between edit and create is we dont need to edit the id but we have to put it here bcoz we
     have to send it to the method in order to find with peron has to be modified-->
+    <br />
+    <h2> Editing Item</h2>
     <p>
         ID:
         <span ng-model="detailToEdit.Id">{{ detailToEdit.Id }}</span>
@@ -34,7 +36,7 @@
     </p>
 
     <p>
-        Name:<br>
+        Quantity:<br>
         <input type="number" name="quantity" ng-model="detailToEdit.quantity" ng-required="true" ng-maxlength="10">
         <span style="color:red" ng-show="myForm.quantity.$dirty && myForm.quantity.$invalid">
             <span ng-show="myForm.quantity.$error.required">quantity is required.</span>

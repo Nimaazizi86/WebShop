@@ -17,7 +17,20 @@ namespace WebShopV1.Controllers
         {
             return View();
         }
-               
+
+        public ActionResult NewItem(string name, decimal cost, string description, int quantity, Product product)
+        {
+            if (ModelState.IsValid)
+            {
+
+                db.Products.Add(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+
+            }
+            return Content("success");
+        }
+
         public JsonResult AjaxThatReturnsJson()
         {
             var storeInfo = db.Products.ToList();
@@ -33,12 +46,11 @@ namespace WebShopV1.Controllers
 
             if (itemInfo == null)
             {
-                itemInfo = new { ID = 0, name = "Not", cost = "Found" };
+                itemInfo = new { Id = 0, name = "Not", cost = "Found" };
             }
 
             return Json(itemInfo, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult AjaxThatReturnsJsonTotal(int? Id)
         {
@@ -136,6 +148,13 @@ namespace WebShopV1.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Delete(int? Id)
+        {
+            Product product = db.Products.Find(Id);
+            db.Products.Remove(product);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
     }
 }

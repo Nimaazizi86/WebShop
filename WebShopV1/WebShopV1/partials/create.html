@@ -1,0 +1,61 @@
+﻿<h2>Creat New</h2>
+
+<br />
+<!--include the name of our module and we create a validate controller to check the
+    input that users enter, later the submitted result will be saved and send to sendform()-->
+<form ng-app="Demo" ng-createController="validateCtrl"
+      name="myForm" novalidate ng-submit="sendform()">
+
+    <p>
+        Name:<br>
+        <!--create an input and check its validity-->
+        <input type="text" name="name" ng-model="form.name" placeholder="enter items name here" ng-required="true" ng-maxlength="10">
+        <!--if it is not valid it will show these errors-->
+        <span style="color:red" ng-show="myForm.name.$touched && myForm.name.$invalid">
+            <span ng-show="myForm.name.$error.required">name is required.</span>
+        </span>
+        <span style="color:red" class="error" ng-show="myForm.name.$error.maxlength">
+            Too long!
+        </span>
+    </p>
+    <p>
+        Cost:<br>
+        <input type="number" name="cost" ng-model="form.cost" placeholder="enter items cost here" ng-required="true" ng-maxlength="10">
+        <span style="color:red" ng-show="myForm.cost.$touched && myForm.cost.$invalid">
+            <span ng-show="myForm.cost.$error.required">Cost is required.</span>
+        </span>
+        <span style="color:red" class="error" ng-show="myForm.cost.$error.maxlength">
+            Too long!
+        </span>
+    </p>
+    <p>
+        Description:<br>
+        <!--create an input and check its validity-->
+        <input type="text" name="description" ng-model="form.description" placeholder="enter items description here" ng-required="true" ng-maxlength="500">
+        <!--if it is not valid it will show these errors-->
+        <span style="color:red" ng-show="myForm.description.$touched && myForm.description.$invalid">
+            <span ng-show="myForm.description.$error.required">description is required.</span>
+        </span>
+        <span style="color:red" class="error" ng-show="myForm.description.$error.maxlength">
+            Too long!
+        </span>
+    </p>
+    <p>
+        Quantity:<br>
+        <input type="number" name="quantity" ng-model="form.quantity" placeholder="enter items quantity here" ng-required="true" ng-maxlength="10">
+        <span style="color:red" ng-show="myForm.quantity.$touched && myForm.quantity.$invalid">
+            <span ng-show="myForm.quantity.$error.required">quantity is required.</span>
+        </span>
+        <span style="color:red" class="error" ng-show="myForm.quantity.$error.maxlength">
+            Too long!
+        </span>
+    </p>
+
+    <p>
+        <!--the submitt button will be disable untill all form is filled properly-->
+        <button type="submit"
+                ng-disabled="myForm.$invalid">
+            Submit
+        </button>
+    </p>
+</form>

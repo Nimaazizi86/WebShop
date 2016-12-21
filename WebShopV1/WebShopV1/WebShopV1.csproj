@@ -229,6 +229,8 @@
     <Content Include="js\shoppingBasket.js" />
     <Content Include="js\store.js" />
     <Content Include="partials\checkOut.html" />
+    <Content Include="partials\create.html" />
+    <Content Include="partials\delete.html" />
     <Content Include="partials\edit.html" />
     <Content Include="partials\store.html" />
     <Content Include="Scripts\angular-mocks.js" />

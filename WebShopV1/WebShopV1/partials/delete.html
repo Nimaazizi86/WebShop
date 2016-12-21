@@ -1,0 +1,29 @@
+﻿<h1>{{ delmessage }}</h1>
+<h1>Are you sure you want to delet this person with following details:</h1>
+
+<table>
+    <tr>
+        <td>ID:</td>
+        <td>{{detail.Id}}</td>
+    </tr>
+    <tr>
+        <td>Name:</td>
+        <td>{{detail.name}}</td>
+    </tr>
+    <tr>
+        <td>Cost:</td>
+        <td>{{detail.cost}}</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>{{detail.description}}</td>
+    </tr>
+    <tr>
+        <td>Quantity</td>
+        <td>{{detail.quantity}}</td>
+    </tr>
+</table>
+
+<a ng-click="DeleteItem(detail.Id)" role="button" class="btn btn-danger">Delete</a>
+<a href="#/store">back to list</a>
+
