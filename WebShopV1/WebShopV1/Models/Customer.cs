@@ -22,5 +22,12 @@ namespace WebShopV1.Models
 
         public ShoppingCart cartDetail { get; set; }
 
+        public virtual List<Order> orderHistory { get; set; }
+
+        public Customer()
+        {
+            orderHistory = new List<Order>();
+        }
     }
+
 }

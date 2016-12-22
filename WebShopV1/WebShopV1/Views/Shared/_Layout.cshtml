@@ -29,7 +29,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @if (User.IsInRole("SuperAdmin"))
                     {
-                        <li>@Html.ActionLink("Admin Panel", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Admin Panel", "Index", "Admin")</li>
                     }
 
                 </ul>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
@@ -12,6 +13,7 @@ namespace WebShopV1.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext di = new ApplicationDbContext();
         private WebShopDbContext db = new WebShopDbContext();
         public ActionResult Index()
         {
@@ -156,5 +158,54 @@ namespace WebShopV1.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public JsonResult Buy()
+        {
+            var storeInfo = db.Products.ToList();
+            var uderInfo = di.Users.ToList(); 
+
+            string sessionToString = (string)Session["order"];
+            var spliter = sessionToString.Split(',').ToList();
+            int total = spliter.Count();
+            decimal totalCost = 0;
+
+            List<Product> cartList = new List<Product>();
+            Order order = new Order();
+            Customer customer = new Customer();
+
+            foreach (var item in spliter)
+            {
+                var theProduct = storeInfo.Single(p => p.Id.ToString() == item);
+                //cartList.Add(storeInfo.Single(p => p.Id.ToString() == item));
+                order.productList.Add(theProduct);
+                totalCost += theProduct.cost;
+
+            }
+            order.orderDate = DateTime.Now;
+            order.totalCost = Convert.ToInt32(totalCost);
+            order.totalCount = total;
+
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = di.Users.FirstOrDefault(x => x.Id == currentUserId);
+
+            customer.firstName = currentUser.UserName;
+            customer.lastName = currentUser.UserName;
+            customer.email = currentUser.Email;
+            customer.adress = "comig soon";
+            customer.orderHistory.Add(order);
+
+            //return Json(order.productList, JsonRequestBehavior.AllowGet);
+
+            var result = new { order = order.productList , cus = customer };
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }
+
+//string getQuantity = "";
+//string getCost = "";
+//getQuantity = total.ToString(CultureInfo.InvariantCulture);
+//getCost = totalCost.ToString(CultureInfo.InvariantCulture);
+//return Json(new { getQuantity, getCost }, JsonRequestBehavior.AllowGet);

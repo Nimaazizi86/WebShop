@@ -203,7 +203,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Admin\AdminConfiguration.cs" />
-    <Compile Include="Migrations\items\ItemsConfiguration.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
@@ -232,6 +232,7 @@
     <Content Include="partials\create.html" />
     <Content Include="partials\delete.html" />
     <Content Include="partials\edit.html" />
+    <Content Include="partials\receipt.html" />
     <Content Include="partials\store.html" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.js" />
@@ -292,10 +293,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\CreateRole.cshtml" />
+    <Content Include="Views\Admin\EditRole.cshtml" />
+    <Content Include="Views\Admin\ManageUserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Admin\" />
+    <Folder Include="Migrations\items\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

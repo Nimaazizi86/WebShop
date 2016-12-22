@@ -83,8 +83,8 @@
         $http.get("Home/AjaxThatReturnsJsonItem/" + $scope.params.Id)
            .then(function (response) {
                $scope.detailToEdit = response.data;
-               condole.log("detail:");
-               condole.log($scope.detailToEdit);
+               console.log("detail:");
+               console.log($scope.detailToEdit);
            })
 
         $scope.sendform = function () {
@@ -106,8 +106,8 @@
                        $location.url('/Store')
                    })
         }
-    })    
-
+    })
+    
     Demo.controller('checkOutController', function ($scope, $http, $rootScope, $location) {
         $http.get("Home/AjaxThatReturnsJsonCartList")
            .then(function (response) {
@@ -132,6 +132,34 @@
                  })
         }
 
+
+    });
+
+    Demo.controller('ReceiptController', function ($scope, $http, $rootScope, $location) {
+        $http.get("Home/Buy")
+           .then(function (response) {
+               $rootScope.cart = response.data;
+               $scope.Tmessage = "Thanks For shopping"
+               $scope.message = "Summery of your shoppoing"
+           });
+
+        //$scope.RefreshCart = function () {
+        //    $http.get("Home/Buy")
+        //     .then(function (response) {
+        //         $rootScope.cart = response.data;
+        //         $scope.message = "Thanks For Shopping"
+        //     });
+        //}
+
+        //$scope.removeFromCart = function (Id) {
+        //    $http.get("../Home/AjaxThatReturnsJsonRemove/" + Id)
+        //         .then(function (response) {
+        //             $rootScope.order = response.data;
+        //             $scope.RefreshCart();
+        //             //update cart
+        //         })
+        //}
+
     });
 
     Demo.config(['$routeProvider', // <-- This is needed to use AngularJS Routing!
@@ -147,11 +175,6 @@
             }).
 
 
-            //when("/addItem/:ID", {
-            //    templateUrl: "/partials/store.html",
-            //    controller: "AddItemController"
-            //}).
-
             when("/edit/:Id", {
                 templateUrl: "/partials/edit.html",
                 controller: "EditController"
@@ -166,6 +189,12 @@
                 templateUrl: "/partials/create.html",
                 controller: "CreateController"
             }).
+
+            when("/receipt", {
+                templateUrl: "/partials/receipt.html",
+                controller: "ReceiptController"
+            }).
+
 
             otherwise({
                 redirectTo: '/store'

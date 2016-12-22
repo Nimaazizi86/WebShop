@@ -32,6 +32,5 @@ namespace WebShopV1.Models
 
         //public System.Data.Entity.DbSet<WebShopV1.Models.ApplicationUser> ApplicationUsers { get; set; }
 
-        //public System.Data.Entity.DbSet<WebShopV1.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

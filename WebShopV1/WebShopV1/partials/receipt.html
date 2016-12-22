@@ -1,0 +1,44 @@
+﻿<h1>{{ Tmessage }}</h1>
+<h2>{{ message }} </h2>
+
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Cost</th>
+        <th>Quantity</th>
+        <th>Descriptyion</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="item in cart.order">
+        <td>{{ item.Id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.cost }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.description }}</td>
+    </tr>
+</table>
+<br />
+<h2>Your Personal Information</h2>
+<table class="table">
+    <tr>
+
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>email</th>
+        <th>Address</th>
+        <th></th>
+    </tr>
+    <tr>
+
+        <td>{{ cart.cus.firstName }}</td>
+        <td>{{ cart.cus.lastName }}</td>
+        <td>{{ cart.cus.email }}</td>
+        <td>{{ cart.cus.adress }}</td>
+    </tr>
+</table>
+
+
+
+<a role="button" href="/#receipt" class="btn btn-info">Print the receipt</a>

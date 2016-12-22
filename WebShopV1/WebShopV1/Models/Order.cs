@@ -16,11 +16,16 @@ namespace WebShopV1.Models
         public int totalCount { get; set; }
 
         public int customerId { get; set; }
-        public virtual Customer customer { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime orderDate { get; set; }
 
-        public List<Product> productList { get; set; }
+        public virtual List<Product> productList { get; set; }
+        public int productId { get; set; }
+
+        public Order()
+        {
+            productList = new List<Product>();
+        }
     }
 }
