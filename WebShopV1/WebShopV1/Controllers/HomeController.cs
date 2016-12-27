@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,7 +24,7 @@ namespace WebShopV1.Controllers
             return View();
         }
 
-        public ActionResult NewItem(string name, decimal cost, string description, int quantity, Product product)
+        public ActionResult NewItem(string name, decimal cost, string description, Product product)
         {
             if (ModelState.IsValid)
             {
@@ -162,7 +166,7 @@ namespace WebShopV1.Controllers
         public JsonResult Buy()
         {
             var storeInfo = db.Products.ToList();
-            var uderInfo = di.Users.ToList(); 
+            var userInfo = di.Users.ToList(); 
 
             string sessionToString = (string)Session["order"];
             var spliter = sessionToString.Split(',').ToList();
@@ -184,28 +188,77 @@ namespace WebShopV1.Controllers
             order.orderDate = DateTime.Now;
             order.totalCost = Convert.ToInt32(totalCost);
             order.totalCount = total;
+            
 
             string currentUserId = User.Identity.GetUserId();
-            ApplicationUser currentUser = di.Users.FirstOrDefault(x => x.Id == currentUserId);
+            ApplicationUser currentUser = userInfo.FirstOrDefault(x => x.Id == currentUserId);
+
+            order.customerId = currentUser.Id;
+
+            //var theUser = uderInfo.Single(p => p.Id.ToString() == currentUserId);
 
             customer.firstName = currentUser.UserName;
             customer.lastName = currentUser.UserName;
             customer.email = currentUser.Email;
             customer.adress = "comig soon";
             customer.orderHistory.Add(order);
-
-            //return Json(order.productList, JsonRequestBehavior.AllowGet);
-
+            db.DetailInfos.Add(order);
+            db.Persons.Add(customer);
+            db.SaveChanges();
+           
             var result = new { order = order.productList , cus = customer };
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
 
-    }
-}
+        public JsonResult SaveFile()
+        {
+            string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
+            strPath += "\\";
+            using (StreamWriter writer = new StreamWriter(strPath + "receipt.txt", true))
+            {
+                Order order = new Order();
+                string text = "order number" + order.Id.ToString();
+                string text2 = "total cost" + order.totalCost.ToString();
+                writer.WriteLine(text);
+                writer.WriteLine(text2);
+            }
+            return Json("File Saved", JsonRequestBehavior.AllowGet);
+        }
 
-//string getQuantity = "";
-//string getCost = "";
-//getQuantity = total.ToString(CultureInfo.InvariantCulture);
-//getCost = totalCost.ToString(CultureInfo.InvariantCulture);
-//return Json(new { getQuantity, getCost }, JsonRequestBehavior.AllowGet);
+
+        public JsonResult PdfSharpConvert()
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+
+            // Create an empty page
+            PdfPage page = document.AddPage();
+
+            // Get an XGraphics object for drawing
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+            // Create a font
+            XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+
+            // Draw the text
+            gfx.DrawString("Hello, World!", font, XBrushes.Black,
+              new XRect(0, 0, page.Width, page.Height),
+              XStringFormat.Center);
+
+            // Save the document...
+            string filename = "HelloWorld.pdf";
+            document.Save(filename);
+            // ...and start a viewer.
+            Process.Start(filename);
+            return Json("File Saved", JsonRequestBehavior.AllowGet);
+
+        }
+
+
+    }
+
+
+
+
+}

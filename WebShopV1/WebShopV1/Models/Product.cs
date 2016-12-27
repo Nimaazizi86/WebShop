@@ -18,7 +18,7 @@ namespace WebShopV1.Models
 
         public string description { get; set; }
 
-        public int quantity { get; set; } 
+        //public int quantity { get; set; }
 
     }
 }

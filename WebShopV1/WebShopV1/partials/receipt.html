@@ -4,18 +4,17 @@
 
 <table class="table">
     <tr>
-        <th>Id</th>
+
         <th>Name</th>
         <th>Cost</th>
-        <th>Quantity</th>
+        <!--<th>Quantity</th>-->
         <th>Descriptyion</th>
         <th></th>
     </tr>
     <tr ng-repeat="item in cart.order">
-        <td>{{ item.Id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.cost }}</td>
-        <td>{{ item.quantity }}</td>
+        <!--<td>{{ item.quantity }}</td>-->
         <td>{{ item.description }}</td>
     </tr>
 </table>
@@ -40,5 +39,5 @@
 </table>
 
 
-
-<a role="button" href="/#receipt" class="btn btn-info">Print the receipt</a>
+<a ng-click="save(cart.order)" role="button" class="btn btn-success">Print the receipt</a> 
+<p>{{ status }}</p>

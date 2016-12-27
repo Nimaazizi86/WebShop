@@ -143,6 +143,13 @@
                $scope.message = "Summery of your shoppoing"
            });
 
+        $scope.save = function () {
+            $http.get("../Home/PdfSharpConvert")
+                 .then(function (response) {
+                     $rootScope.status = response.data;
+                 })
+        }
+
         //$scope.RefreshCart = function () {
         //    $http.get("Home/Buy")
         //     .then(function (response) {

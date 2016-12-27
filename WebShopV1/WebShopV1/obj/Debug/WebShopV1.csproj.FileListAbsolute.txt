@@ -80,3 +80,13 @@ C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\Microsoft.Owin.S
 C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\obj\Debug\WebShopV1.dll
 C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\obj\Debug\WebShopV1.pdb
 C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\obj\Debug\WebShopV1.csprojResolveAssemblyReference.cache
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\HtmlRenderer.dll
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\HtmlRenderer.PdfSharp.dll
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\PdfSharp.Charting.dll
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\PdfSharp.dll
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\HtmlRenderer.pdb
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\HtmlRenderer.PdfSharp.pdb
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\PdfSharp.xml
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\PdfSharp.Charting.xml
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\de\PdfSharp.resources.dll
+C:\Users\deltagare\Source\Repos\WebShop\WebShopV1\WebShopV1\bin\de\PdfSharp.Charting.resources.dll
