@@ -144,7 +144,7 @@
            });
 
         $scope.save = function () {
-            $http.get("../Home/PdfSharpConvert")
+            $http.get("../Home/SaveFile")
                  .then(function (response) {
                      $rootScope.status = response.data;
                  })

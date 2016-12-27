@@ -215,45 +215,72 @@ namespace WebShopV1.Controllers
         {
             string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
             strPath += "\\";
+
+            var storeInfo = db.Products.ToList();
+            var userInfo = di.Users.ToList();
+
+            string sessionToString = (string)Session["order"];
+            var spliter = sessionToString.Split(',').ToList();
+            int total = spliter.Count();
+            decimal totalCost = 0;
+
+            //List<Product> cartList = new List<Product>();
+            Order order = new Order();
+            //Customer customer = new Customer();
+
+
+
+
+
             using (StreamWriter writer = new StreamWriter(strPath + "receipt.txt", true))
             {
-                Order order = new Order();
-                string text = "order number" + order.Id.ToString();
-                string text2 = "total cost" + order.totalCost.ToString();
-                writer.WriteLine(text);
-                writer.WriteLine(text2);
+                writer.WriteLine("Thanks for shopping!");
+                foreach (var item in spliter)
+                {
+                    var theProduct = storeInfo.Single(p => p.Id.ToString() == item);
+                    //cartList.Add(storeInfo.Single(p => p.Id.ToString() == item));
+                    order.productList.Add(theProduct);
+                    totalCost += theProduct.cost;
+                    string printItem = "product name: " + theProduct.name + ", Product cost:" + theProduct.cost ;
+                    writer.WriteLine(printItem);
+                }
+
+                string noi = "Number of items: " + total.ToString();
+                string tC = "total cost: " + totalCost.ToString();
+                writer.WriteLine(noi);
+                writer.WriteLine(tC);
             }
             return Json("File Saved", JsonRequestBehavior.AllowGet);
         }
 
 
-        public JsonResult PdfSharpConvert()
-        {
-            // Create a new PDF document
-            PdfDocument document = new PdfDocument();
+        //public JsonResult PdfSharpConvert()
+        //{
+        //    // Create a new PDF document
+        //    PdfDocument document = new PdfDocument();
 
-            // Create an empty page
-            PdfPage page = document.AddPage();
+        //    // Create an empty page
+        //    PdfPage page = document.AddPage();
 
-            // Get an XGraphics object for drawing
-            XGraphics gfx = XGraphics.FromPdfPage(page);
+        //    // Get an XGraphics object for drawing
+        //    XGraphics gfx = XGraphics.FromPdfPage(page);
 
-            // Create a font
-            XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+        //    // Create a font
+        //    XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
 
-            // Draw the text
-            gfx.DrawString("Hello, World!", font, XBrushes.Black,
-              new XRect(0, 0, page.Width, page.Height),
-              XStringFormat.Center);
+        //    // Draw the text
+        //    gfx.DrawString("Hello, World!", font, XBrushes.Black,
+        //      new XRect(0, 0, page.Width, page.Height),
+        //      XStringFormat.Center);
 
-            // Save the document...
-            string filename = "HelloWorld.pdf";
-            document.Save(filename);
-            // ...and start a viewer.
-            Process.Start(filename);
-            return Json("File Saved", JsonRequestBehavior.AllowGet);
+        //    // Save the document...
+        //    string filename = "HelloWorld.pdf";
+        //    document.Save(filename);
+        //    // ...and start a viewer.
+        //    Process.Start(filename);
+        //    return Json("File Saved", JsonRequestBehavior.AllowGet);
 
-        }
+        //}
 
 
     }
