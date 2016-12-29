@@ -10,6 +10,8 @@ namespace WebShopV1.Models
     {
         [Key]
         public int Id { get; set; }
+        
+        public string userId { get; set; }
 
         [Required]
         public string firstName { get; set; }

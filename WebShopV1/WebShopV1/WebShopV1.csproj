@@ -251,6 +251,7 @@
     <Content Include="partials\edit.html" />
     <Content Include="partials\receipt.html" />
     <Content Include="partials\store.html" />
+    <Content Include="partials\userDetails.html" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.js" />
     <Content Include="Scripts\angular-route.min.js" />

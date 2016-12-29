@@ -143,7 +143,7 @@ namespace WebShopV1.Controllers
             }
         }
 
-        public ActionResult Edit([Bind(Include = "Id,name,cost,description,quantity")] Product product)
+        public ActionResult Edit([Bind(Include = "Id,name,cost,description")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -162,8 +162,47 @@ namespace WebShopV1.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult userDetails()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userInfo = di.Users.ToList();
+                var userDBInfo = db.Persons.ToList();
+                string currentUserId = User.Identity.GetUserId();
+                ApplicationUser currentUser = userInfo.FirstOrDefault(x => x.Id == currentUserId);
+                //Customer customer = new Customer();
+                Customer customer = userDBInfo.FirstOrDefault(x => x.userId == currentUserId);
+                if (customer == null)
+                {
+                    customer = new Customer();
+                    customer.userId = currentUserId;
+                    return Json(customer, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return new EmptyResult();
+                }
+       
+            }
+            else
+            {
+                return new EmptyResult();
+            }
+        }
+
+        //public ActionResult EditUserInfo([Bind(Include = "Id,fisrtName,lastName,email,adress")] Customer customer)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(customer).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
         [Authorize]
-        public JsonResult Buy()
+        public ActionResult Buy(string userId, string firstName, string lastName, string email, string adress, Customer customer)
         {
             var storeInfo = db.Products.ToList();
             var userInfo = di.Users.ToList(); 
@@ -175,7 +214,7 @@ namespace WebShopV1.Controllers
 
             List<Product> cartList = new List<Product>();
             Order order = new Order();
-            Customer customer = new Customer();
+            Customer buyingCustomer = new Customer();
 
             foreach (var item in spliter)
             {
@@ -197,11 +236,11 @@ namespace WebShopV1.Controllers
 
             //var theUser = uderInfo.Single(p => p.Id.ToString() == currentUserId);
 
-            customer.firstName = currentUser.UserName;
-            customer.lastName = currentUser.UserName;
-            customer.email = currentUser.Email;
-            customer.adress = "comig soon";
-            customer.orderHistory.Add(order);
+            buyingCustomer.firstName = currentUser.UserName;
+            buyingCustomer.lastName = currentUser.UserName;
+            buyingCustomer.email = currentUser.Email;
+            buyingCustomer.adress = "comig soon";
+            buyingCustomer.orderHistory.Add(order);
             db.DetailInfos.Add(order);
             db.Persons.Add(customer);
             db.SaveChanges();
@@ -210,6 +249,7 @@ namespace WebShopV1.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
+
 
         public JsonResult SaveFile()
         {

@@ -1,0 +1,144 @@
+﻿<div ng-show="!showInfo">
+
+    {{infoMessage}}
+
+    <br />
+    <form ng-submit="SaveFormData()" name="myForm">
+
+        <p>
+            Id:
+            <span ng-model="customer.Id">{{ customer.Id }}</span>
+        </p>
+
+        <p>
+            UserId:
+            <span ng-model="customer.userId">{{ customer.userId }}</span>
+        </p>
+
+        <p>
+            First Name:<br>
+            <!--create an input and check its validity-->
+            <input type="text" name="firstName" ng-model="customer.firstName" placeholder="enter your name here" ng-required="true" ng-maxlength="10">
+            <!--if it is not valid it will show these errors-->
+            <span style="color:red" ng-show="myForm.firstName.$touched && myForm.firstName.$invalid">
+                <span ng-show="myForm.firstName.$error.required">firstName is required.</span>
+            </span>
+            <span style="color:red" class="error" ng-show="myForm.firstName.$error.maxlength">
+                Too long!
+            </span>
+        </p>
+
+        <p>
+            Last Name:<br>
+            <!--create an input and check its validity-->
+            <input type="text" name="lastName" ng-model="customer.lastName" placeholder="enter your name here" ng-required="true" ng-maxlength="10">
+            <!--if it is not valid it will show these errors-->
+            <span style="color:red" ng-show="myForm.lastName.$touched && myForm.lastName.$invalid">
+                <span ng-show="myForm.lastName.$error.required">lastName is required.</span>
+            </span>
+            <span style="color:red" class="error" ng-show="myForm.lastName.$error.maxlength">
+                Too long!
+            </span>
+        </p>
+
+        <p>
+            Email:<br>
+            <!--create an input and check its validity-->
+            <input type="email" name="email" ng-model="customer.email" placeholder="enter your name here" ng-required="true">
+            <!--if it is not valid it will show these errors-->
+            <span style="color:red" ng-show="myForm.email.$touched && myForm.email.$invalid">
+                <span ng-show="myForm.email.$error.required">email is required.</span>
+            </span>
+        </p>
+
+        <p>
+            Address:<br>
+            <!--create an input and check its validity-->
+            <input type="text" name="adress" ng-model="customer.adress" placeholder="enter your adress here" ng-required="true" ng-maxlength="10">
+            <!--if it is not valid it will show these errors-->
+            <span style="color:red" ng-show="myForm.adress.$touched && myForm.adress.$invalid">
+                <span ng-show="myForm.adress.$error.required">lastName is required.</span>
+            </span>
+            <span style="color:red" class="error" ng-show="myForm.adress.$error.maxlength">
+                Too long!
+            </span>
+        </p>
+
+        <input type="submit" class="btn btn-success" ng-disabled="PersonInfoForm.$invalid" />
+
+        
+    </form>
+</div>
+
+<div ng-show="showInfo">
+    <h3>Please confirm your information before proceeding</h3>
+
+    <div>
+        <dl class="dl-horizontal">
+
+
+            <dt>
+                First name
+            </dt>
+            <dd>
+                {{customer.firstName}}
+            </dd>
+            <dt>
+                Last name
+            </dt>
+            <dd>
+                {{customer.lastName}}
+            </dd>
+            <dt>
+                Email
+            </dt>
+            <dd>
+                {{customer.email}}
+            </dd>
+            <dt>
+                 Address
+            </dt>
+            <dd>
+                {{customer.adress}}
+            </dd>
+           
+        </dl>
+
+        <button ng-click="EditInformation()">Edit the information</button>
+    </div>
+    <br />
+
+    <a role="button" href="/#receipt/{{ customer.Id }}" class="btn btn-info">Accept information and buy</a>
+
+    <p>TEST</p>
+    {{customer.Id}}
+    <p>------------------</p>
+    {{customer.userId}}
+
+    <!--<h3>If information is correct then enter your credit card info</h3>
+
+    <h4>Your total price : {{totalCost}}</h4>
+
+    <form ng-submit="SaveCreditCardData()" name="CreditCardForm">
+        <dl>
+            <dt>
+                Credit card number
+            </dt>
+            <dd>
+                <input type="text" ng-model="userDetail.creditcardNumber" required />
+                <span ng-show="CreditCardForm.creditcardNumber.$touched && CreditCardForm.creditcardNumber.$error.required">Item name is required</span>
+            </dd>
+            <dt>
+                Submit
+            </dt>
+            <dd>
+                <input type="submit" class="btn btn-success" ng-disabled="CreditCardForm.$invalid" />
+            </dd>
+        </dl>
+        <p>When submitting credit card number you will be taken to credit card payment site and then redirected back</p>
+    </form>-->
+
+   
+</div>
+
+<!--<a ng-show="role=='SuperAdmin'" role="button" href="/#edit/{{ item.Id }}" class="btn btn-info">Edit Item</a>-->

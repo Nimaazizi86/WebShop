@@ -80,6 +80,8 @@
     
     Demo.controller("EditController", function ($scope, $http, $location, $routeParams) {
         $scope.params = $routeParams;
+        console.log("Test Edit:");
+        console.log($scope.params);
         $http.get("Home/AjaxThatReturnsJsonItem/" + $scope.params.Id)
            .then(function (response) {
                $scope.detailToEdit = response.data;
@@ -135,19 +137,62 @@
 
     });
 
-    Demo.controller('ReceiptController', function ($scope, $http, $rootScope, $location) {
-        $http.get("Home/Buy")
+    Demo.controller('UserDetailsController', function ($scope, $http, $rootScope, $location) {
+        $http.get("Home/userDetails")
+           .then(function (response) {
+               $rootScope.customer = response.data;
+               $scope.infoMessage = "Please enter you info"
+           });
+
+
+        //$scope.BuyItems = function (Id) {
+        //    $location.path("/receipt");
+        //}
+
+        // using ng-hide/show to show the next form and hide the last things
+        $scope.SaveFormData = function () {
+            $scope.showInfo = true;
+        }
+
+        $scope.EditInformation = function () {
+            $scope.showInfo = false;
+        }
+
+
+    });
+
+    Demo.controller('ReceiptController', function ($scope, $http, $rootScope, $location, $routeParams) {
+        $scope.paramsss = $routeParams;
+        console.log("bUY:");
+        console.log($scope.paramsss);
+        $http.get("Home/Buy/" + $scope.paramsss.Id)
+
            .then(function (response) {
                $rootScope.cart = response.data;
                $scope.Tmessage = "Thanks For shopping"
                $scope.message = "Summery of your shoppoing"
            });
 
+
+        //$scope.BuyItems = function () {
+        //    $location.path("/CheckoutUserDetails");
+        //}
+
+        // using ng-hide/show to show the next form and hide the last things
+        $scope.SaveFormData = function () {
+            $scope.showInfo = true;
+        }
+
+        $scope.EditInformation = function () {
+            $scope.showInfo = false;
+        }
+
         $scope.save = function () {
             $http.get("../Home/SaveFile")
                  .then(function (response) {
                      $rootScope.status = response.data;
                  })
+
         }
 
         //$scope.RefreshCart = function () {
@@ -197,17 +242,20 @@
                 controller: "CreateController"
             }).
 
-            when("/receipt", {
+            when("/receipt/:Id", {
                 templateUrl: "/partials/receipt.html",
                 controller: "ReceiptController"
+            }).
+
+            when("/userDetails", {
+                templateUrl: "/partials/userDetails.html",
+                controller: "UserDetailsController"
             }).
 
 
             otherwise({
                 redirectTo: '/store'
             });
-
-
 
       }]);
 
