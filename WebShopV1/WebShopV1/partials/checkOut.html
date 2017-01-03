@@ -24,6 +24,7 @@
 </table>
 
 <!--<a role="button" href="/#receipt" class="btn btn-info">Buy</a>-->
-
-<a role="button" href="/#userDetails" class="btn btn-info">Buy</a>
-
+<p>{{ userstatus }}</p>
+<p>{{ statusMessage }}</p>
+<p ng-show="userstatus=='false'">{{ statusMessage }}</p>
+<a role="button" ng-show="userstatus=='true'" href="/#userDetails" class="btn btn-info">Buy</a>

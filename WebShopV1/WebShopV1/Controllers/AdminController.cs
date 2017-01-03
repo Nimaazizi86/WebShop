@@ -32,6 +32,21 @@ namespace WebShopV1.Controllers
             return View(roles);
         }
 
+        [AllowAnonymous]
+        public JsonResult GetStatus()
+        {
+            bool status;
+            if (User.Identity.IsAuthenticated)
+            {
+                status = true;
+            }
+            else
+            {
+                status = false;
+            }
+            return Json(status, JsonRequestBehavior.AllowGet);
+        }
+
         public string GetAdmin()
         {
             string role;

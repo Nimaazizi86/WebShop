@@ -4,6 +4,7 @@ using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -176,11 +177,20 @@ namespace WebShopV1.Controllers
                 {
                     customer = new Customer();
                     customer.userId = currentUserId;
-                    return Json(customer, JsonRequestBehavior.AllowGet);
+                    var result = new { orderList = "", cus = customer };
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return new EmptyResult();
+                    List<Order> orderList = new List<Order>();
+
+                    foreach (var item in customer.orderHistory)
+                    {
+                        orderList.Add(db.DetailInfos.Single(p => p.Id == item.Id));
+                    }
+                    var result = new { orderList = orderList, cus = customer };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+
                 }
        
             }
@@ -204,8 +214,8 @@ namespace WebShopV1.Controllers
         [Authorize]
         public ActionResult Buy(string userId, string firstName, string lastName, string email, string adress, Customer customer)
         {
-            var storeInfo = db.Products.ToList();
-            var userInfo = di.Users.ToList(); 
+            //var storeInfo = db.Products.ToList();
+            //var userInfo = di.Users.ToList(); 
 
             string sessionToString = (string)Session["order"];
             var spliter = sessionToString.Split(',').ToList();
@@ -214,11 +224,11 @@ namespace WebShopV1.Controllers
 
             List<Product> cartList = new List<Product>();
             Order order = new Order();
-            Customer buyingCustomer = new Customer();
+            //Customer buyingCustomer = new Customer();
 
             foreach (var item in spliter)
             {
-                var theProduct = storeInfo.Single(p => p.Id.ToString() == item);
+                var theProduct = db.Products.ToList().Single(p => p.Id.ToString() == item);
                 //cartList.Add(storeInfo.Single(p => p.Id.ToString() == item));
                 order.productList.Add(theProduct);
                 totalCost += theProduct.cost;
@@ -227,22 +237,25 @@ namespace WebShopV1.Controllers
             order.orderDate = DateTime.Now;
             order.totalCost = Convert.ToInt32(totalCost);
             order.totalCount = total;
-            
 
-            string currentUserId = User.Identity.GetUserId();
-            ApplicationUser currentUser = userInfo.FirstOrDefault(x => x.Id == currentUserId);
 
-            order.customerId = currentUser.Id;
+            db.Persons.AddOrUpdate(
+              p => p.userId,
+              new Customer {
+                  userId = customer.userId,
+                  firstName = customer.firstName,
+                  lastName = customer.lastName,
+                  email = customer.email,
+                  adress = customer.adress
+              }
+            );
 
-            //var theUser = uderInfo.Single(p => p.Id.ToString() == currentUserId);
-
-            buyingCustomer.firstName = currentUser.UserName;
-            buyingCustomer.lastName = currentUser.UserName;
-            buyingCustomer.email = currentUser.Email;
-            buyingCustomer.adress = "comig soon";
-            buyingCustomer.orderHistory.Add(order);
+            var newCustomer = db.Persons.Where(p => p.userId == customer.userId).FirstOrDefault();
+            newCustomer.orderHistory.Add(order);
+          
             db.DetailInfos.Add(order);
-            db.Persons.Add(customer);
+
+            //db.Persons.Add(customer);
             db.SaveChanges();
            
             var result = new { order = order.productList , cus = customer };
@@ -251,7 +264,7 @@ namespace WebShopV1.Controllers
         }
 
 
-        public JsonResult SaveFile()
+        public ActionResult SaveFile()
         {
             string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
             strPath += "\\";
@@ -267,11 +280,6 @@ namespace WebShopV1.Controllers
             //List<Product> cartList = new List<Product>();
             Order order = new Order();
             //Customer customer = new Customer();
-
-
-
-
-
             using (StreamWriter writer = new StreamWriter(strPath + "receipt.txt", true))
             {
                 writer.WriteLine("Thanks for shopping!");
@@ -281,10 +289,9 @@ namespace WebShopV1.Controllers
                     //cartList.Add(storeInfo.Single(p => p.Id.ToString() == item));
                     order.productList.Add(theProduct);
                     totalCost += theProduct.cost;
-                    string printItem = "product name: " + theProduct.name + ", Product cost:" + theProduct.cost ;
+                    string printItem = "product name: " + theProduct.name + ", Product cost:" + theProduct.cost;
                     writer.WriteLine(printItem);
                 }
-
                 string noi = "Number of items: " + total.ToString();
                 string tC = "total cost: " + totalCost.ToString();
                 writer.WriteLine(noi);
@@ -292,6 +299,13 @@ namespace WebShopV1.Controllers
             }
             return Json("File Saved", JsonRequestBehavior.AllowGet);
         }
+
+        //public ActionResult UserHistoryList()
+        //{
+        //    string currentUserId = User.Identity.GetUserId();
+        //    db.Persons.Where
+        //    return Json(history, JsonRequestBehavior.AllowGet);
+        //}
 
 
         //public JsonResult PdfSharpConvert()

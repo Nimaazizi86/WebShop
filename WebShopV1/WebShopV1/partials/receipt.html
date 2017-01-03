@@ -1,6 +1,16 @@
 ﻿<h1>{{ Tmessage }}</h1>
 <h2>{{ message }} </h2>
 
+<p>
+    Id:
+    <span ng-model="customer.Id">{{ customer.Id }}</span>
+</p>
+
+<p>
+    UserId:
+    <span ng-model="customer.userId">{{ customer.userId }}</span>
+</p>
+
 
 <table class="table">
     <tr>
@@ -11,7 +21,7 @@
         <th>Descriptyion</th>
         <th></th>
     </tr>
-    <tr ng-repeat="item in cart.order">
+    <tr ng-repeat="item in purchasedList">
         <td>{{ item.name }}</td>
         <td>{{ item.cost }}</td>
         <!--<td>{{ item.quantity }}</td>-->
@@ -19,25 +29,6 @@
     </tr>
 </table>
 <br />
-<h2>Your Personal Information</h2>
-<table class="table">
-    <tr>
-
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>email</th>
-        <th>Address</th>
-        <th></th>
-    </tr>
-    <tr>
-
-        <td>{{ cart.cus.firstName }}</td>
-        <td>{{ cart.cus.lastName }}</td>
-        <td>{{ cart.cus.email }}</td>
-        <td>{{ cart.cus.adress }}</td>
-    </tr>
-</table>
-
 
 <a ng-click="save()" role="button" class="btn btn-success">Print the receipt</a> 
 <p>{{ status }}</p>
