@@ -1,0 +1,74 @@
+﻿@model WebShopV1.Models.Customer
+
+@{
+    ViewBag.Title = "UsersDetailAdmin";
+}
+
+<h2>Users Detail</h2>
+
+
+<p><strong>First Name:</strong></p>
+<p>@Html.DisplayFor(model => model.firstName)</p>
+<p><strong>Last Name:</strong></p>
+<p>@Html.DisplayFor(model => model.lastName)</p>
+<p><strong>address:</strong></p>
+<p>@Html.DisplayFor(model => model.adress)</p>
+<p><strong>Email:</strong></p>
+<p>@Html.DisplayFor(model => model.email)</p>
+
+<br />
+<h2>Users shipping history</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Total cost
+        </th>
+        <th>
+            Total amount
+        </th>
+        <th>
+            Date
+        </th>
+        @*<th>products</th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.orderHistory)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.totalCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.totalCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditOrderhistory", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsOrderhistory", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+            <td>
+                @*<div style="display: none;">@Html.EditorFor(modelItem => item.productList)</div>*@
+
+
+            </td>
+        </tr>
+        for (int i = 0; i < item.productList.Count; i++)
+        {
+            @Html.HiddenFor(modelItem => item.productList[i])}
+        }
+
+</table>

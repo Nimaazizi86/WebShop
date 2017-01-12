@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebShop1.Models;
 using WebShopV1.Models;
 
 namespace WebShopV1.Controllers
@@ -15,14 +17,19 @@ namespace WebShopV1.Controllers
     public class AdminController : Controller
     {
 
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext di = new ApplicationDbContext();
+        private WebShopDbContext db = new WebShopDbContext();
 
         // GET: Admin
         public ActionResult Index()
+        {            
+            return View();
+        }
+
+        public ActionResult Roles()
         {
-            
             //we are simply getting the Roles collection from ApplicationDbContext and returning to the View
-            var roles = db.Roles.Include(o => o.Users).ToList();
+            var roles = di.Roles.Include(o => o.Users).ToList();
 
             //var users = db.Users.Include(o => o.Roles).ToList();
 
@@ -31,6 +38,87 @@ namespace WebShopV1.Controllers
             //var allUsers = db.Users.ToList();
             return View(roles);
         }
+
+        public ActionResult Users()
+        {
+            //var roles = db.Roles.Include(o => o.Users).ToList();
+
+            var users = di.Users.Include(o => o.Roles).ToList();
+
+
+            //var allUsers = db.Users.ToList();
+            return View(users);
+        }
+
+        public ActionResult UsersDetailAdmin(string Id)
+        {
+            var thisUser = db.Persons.Where(p => p.userId == Id).FirstOrDefault();
+            //thisUser = db.Persons.Include(p => p.orderHistory).FirstOrDefault();
+            return View(thisUser);
+        }
+
+        public ActionResult EditOrderhistory(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Order order = db.DetailInfos.Find(Id);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditOrderhistory([Bind(Include = "Id,totalCost,totalCount,customerId,orderDate")] Order order)
+        {
+            //var test = db.Persons.Include(o => o.orderHistory).ToList();
+
+            if (ModelState.IsValid)
+            {
+                //var result = test.FirstOrDefault(x => x.Id == order.Id);
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+
+                //var orderId = order.Id;
+                //var item = from x in db.Persons
+                //           where x.orderHistory.Find(p => p. == orderId
+
+                //var thisPerson = db.Persons.Where(p => p.orderHistory[orderId]).FirstOrDefault();
+
+                var thisUser = db.Persons.Where(p => p.Id.ToString() == order.customerId).FirstOrDefault();
+
+                return RedirectToAction("UsersDetailAdmin",new { Id = thisUser.userId });
+            }
+            return View(order);
+        }
+
+        public ActionResult DetailsOrderhistory(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Order order = db.DetailInfos.Find(Id);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+            return View(order);
+        }
+
+        public ActionResult DeleteUserByAdmin(int? Id)
+        {
+            Product product = db.Products.Find(Id);
+            db.Products.Remove(product);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
 
         [AllowAnonymous]
         public JsonResult GetStatus()
@@ -88,11 +176,11 @@ namespace WebShopV1.Controllers
         {
             try
             {
-                db.Roles.Add(new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
+                di.Roles.Add(new Microsoft.AspNet.Identity.EntityFramework.IdentityRole()
                 {
                     Name = collection["RoleName"]
                 });
-                db.SaveChanges();
+                di.SaveChanges();
                 ViewBag.ResultMessage = "Role created successfully !";
                 return RedirectToAction("Index");
             }
@@ -107,16 +195,16 @@ namespace WebShopV1.Controllers
         //the ApplicationDbContext object deletes the selected role from the database.
         public ActionResult DeleteRole(string RoleName)
         {
-            var thisRole = db.Roles.Where(r => r.Name.Equals(RoleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            db.Roles.Remove(thisRole);
-            db.SaveChanges();
+            var thisRole = di.Roles.Where(r => r.Name.Equals(RoleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            di.Roles.Remove(thisRole);
+            di.SaveChanges();
             return RedirectToAction("Index");
 
         }
 
         public ActionResult EditRole(string roleName)
         {
-            var thisRole = db.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            var thisRole = di.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             return View(thisRole);
         }
 
@@ -128,8 +216,8 @@ namespace WebShopV1.Controllers
         {
             try
             {
-                db.Entry(role).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                di.Entry(role).State = System.Data.Entity.EntityState.Modified;
+                di.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -142,9 +230,9 @@ namespace WebShopV1.Controllers
         public ActionResult ManageUserRoles()
         {
             // prepopulat roles for the view dropdown
-            var Roleslist = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            var Roleslist = di.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roleslist = Roleslist;
-            var Userslist = db.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
+            var Userslist = di.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
             ViewBag.Userslist = Userslist;
             return View();
         }
@@ -159,17 +247,17 @@ namespace WebShopV1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RoleAddToUser(string UserName, string RoleName)
         {
-            ApplicationUser user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            var userStore = new UserStore<ApplicationUser>(db);
+            ApplicationUser user = di.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            var userStore = new UserStore<ApplicationUser>(di);
             var userManager = new UserManager<ApplicationUser>(userStore);
             userManager.AddToRole(user.Id, RoleName);
 
             ViewBag.ResultMessage = "Role created successfully !";
 
             // prepopulat roles for the view dropdown
-            var RolesList = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            var RolesList = di.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.RolesList = RolesList;
-            var Userslist = db.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
+            var Userslist = di.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
             ViewBag.Userslist = Userslist;
 
             return View("ManageUserRoles");
@@ -182,16 +270,16 @@ namespace WebShopV1.Controllers
         {
             if (!string.IsNullOrWhiteSpace(UserName))
             {
-                ApplicationUser user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                var userStore = new UserStore<ApplicationUser>(db);
+                ApplicationUser user = di.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                var userStore = new UserStore<ApplicationUser>(di);
                 var userManager = new UserManager<ApplicationUser>(userStore);
 
                 ViewBag.RolesForThisUser = userManager.GetRoles(user.Id);
 
                 // prepopulat roles for the view dropdown
-                var RolesList = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+                var RolesList = di.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
                 ViewBag.RolesList = RolesList;
-                var Userslist = db.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
+                var Userslist = di.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
                 ViewBag.Userslist = Userslist;
 
             }
@@ -207,9 +295,9 @@ namespace WebShopV1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteRoleForUser(string UserName, string RoleName)
         {
-            var userStore = new UserStore<ApplicationUser>(db);
+            var userStore = new UserStore<ApplicationUser>(di);
             var userManager = new UserManager<ApplicationUser>(userStore);
-            ApplicationUser user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            ApplicationUser user = di.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
             if (userManager.IsInRole(user.Id, RoleName))
             {
@@ -221,9 +309,9 @@ namespace WebShopV1.Controllers
                 ViewBag.ResultMessage = "This user doesn't belong to selected role.";
             }
             // prepopulat roles for the view dropdown
-            var RolesList = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            var RolesList = di.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.RolesList = RolesList;
-            var Userslist = db.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
+            var Userslist = di.Users.OrderBy(r => r.UserName).ToList().Select(rr => new SelectListItem { Value = rr.UserName.ToString(), Text = rr.UserName }).ToList();
             ViewBag.Userslist = Userslist;
 
             return View("ManageUserRoles");

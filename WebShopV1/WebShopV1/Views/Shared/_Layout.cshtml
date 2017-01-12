@@ -27,6 +27,7 @@
                     
                     @*<li><a href="#/store">Store</a></li>*@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Profile","UserProfile","Home")</li>
                     @if (User.IsInRole("SuperAdmin"))
                     {
                         <li>@Html.ActionLink("Admin Panel", "Index", "Admin")</li>

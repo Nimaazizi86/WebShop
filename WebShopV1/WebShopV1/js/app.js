@@ -155,20 +155,23 @@
            });
 
         $scope.HopToReceipt = function () {
-            console.log("info to send " + $rootScope.customer)
+            console.log("info to send: " + $rootScope.customer)
+            console.log("This?: " + $rootScope.result)
+            console.log("or This?: " + $rootScope.result.cus)
+
 
             $http({
                 url: "../Home/Buy/",
                 method: "POST",
-                data: { userId: $rootScope.customer, customer: $rootScope.customer }
+                //data: { userId: $rootScope.customer, customer: $rootScope.customer }
+                data: { userId: $rootScope.result.cus, customer: $rootScope.result.cus }
+
             }
 
             )
             console.log("am i here? " + $rootScope.customer)
             $location.url('/receipt')
-            //console.log("not even here? " + $rootScope.customer)
-            //$location.url("/receipt")
-            //$location.path("/receipt");
+
         }
         $scope.save = function () {
             $http.get("../Home/SaveFile")

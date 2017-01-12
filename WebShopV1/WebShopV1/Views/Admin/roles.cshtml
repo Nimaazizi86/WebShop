@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Roles Listing </h2>
+
+@Html.ActionLink("Create New Role", "CreateRole") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
+<hr />
+@*<div>
+        @foreach (var role in Model)
+        {
+            <p>
+                <strong>@role.Name | </strong>
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+                @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })
+            </p>
+        }
+    </div>*@
+
+
+
+<table class="table">
+    <tr>
+        @*by Html.DisplayNameFor we define the name for a variable to get apear on the screen, model is the course table*@
+        <th>Role</th>
+        <th>Users</th>
+
+        <th></th>
+    </tr>
+    @*create one foreach to get into the items in course table, by Html.DisplayFor we shows the values of the variables*@
+    @foreach (var role in Model)
+    {
+        <tr>
+            <td>
+                <strong>@role.Name </strong>
+            </td>
+            <td>
+                <strong>coming soon </strong>
+            </td>
+
+            <td>
+                @*some actoin links and their methods to call and also send the id of the course that is selected to the method*@
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteRole?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+                @Html.ActionLink("Rename", "EditRole", new { roleName = @role.Name })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityUser>
+
+
+@{
+    ViewBag.Title = "users";
+}
+
+<h2>List of Users</h2>
+
+@Html.ActionLink("Create New user", "CreateRole") 
+
+<table class="table">
+    <tr>
+        @*by Html.DisplayNameFor we define the name for a variable to get apear on the screen, model is the course table*@
+        <th>Users</th>
+        <th>Roles</th>
+
+        <th></th>
+    </tr>
+    @*create one foreach to get into the items in course table, by Html.DisplayFor we shows the values of the variables*@
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>
+                <strong>@user.UserName </strong>
+            </td>
+            <td>
+                <strong>coming soon </strong>
+            </td>
+
+            <td>
+                @*some actoin links and their methods to call and also send the id of the course that is selected to the method*@
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteUserByAdmin?RoleName=@user.UserName" class="delLink" style="color:red;">Delete</a></span> |
+                @Html.ActionLink("Details", "UsersDetailAdmin", new { Id = @user.Id })
+            </td>
+        </tr>
+    }
+
+</table>

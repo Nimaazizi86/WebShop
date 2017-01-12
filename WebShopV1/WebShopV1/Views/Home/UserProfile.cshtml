@@ -1,0 +1,62 @@
+﻿@using WebShopV1.Models
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<h2>UserProfile</h2>
+<br />
+<h3>Your personal detials</h3>
+
+<p><strong>Id:</strong> @ViewBag.cus.Id</p>
+<p><strong>First Name:</strong> @ViewBag.cus.firstName</p>
+<p><strong>Last name:</strong> @ViewBag.cus.lastName</p>
+<p><strong>Address:</strong> @ViewBag.cus.adress</p>
+<p><strong>Email:</strong> @ViewBag.cus.email</p>
+@*<a role="button" class="btn btn-success">Edit</a>*@
+@Html.ActionLink("Edit", "EditProfile", new { Id = ViewBag.cus.Id })
+
+
+<h3>Your previous orders </h3>
+<table class="table">
+    <tr>
+        <th>Order Number</th>
+        <th>Order Date</th>
+        @*<th>List of prodcuts</th>*@
+        <th>Total cost</th>
+        <th>Total items</th>
+
+    </tr>
+    @foreach (Order s in ViewBag.orderHistory)
+    {
+        <tr>
+            <td>
+                <strong>@s.Id </strong>
+            </td>
+            <td>
+                <strong>@s.orderDate </strong>
+            </td>
+            <td>
+                <strong>@s.totalCost </strong>
+            </td>
+            @*<td>
+                @foreach (Product p in ViewBag.orderHistory.poductList)
+                {
+                    <td>
+                        <strong>@p.Id </strong>
+                    </td>
+                    <td>
+                        <strong>@p.name </strong>
+                    </td>
+                }
+            </td>*@
+
+            <td>
+                <strong>@s.totalCount </strong>
+            </td>
+
+        </tr>
+    }
+
+</table>
+

@@ -1,0 +1,98 @@
+﻿@model WebShopV1.Models.Order
+
+@{
+    ViewBag.Title = "DetailsOrderhistory";
+}
+
+<h2>DetailsOrderhistory</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.totalCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.totalCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customerId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customerId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.orderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.orderDate)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <h2>product list</h2>
+    <table class="table">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                name
+            </th>
+            <th>
+                cost
+            </th>
+            <th>
+                description
+            </th>
+            @*<th>products</th>*@
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.productList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditOrderhistory", new { id = item.Id })
+                </td>
+                <td>
+                    @*<div style="display: none;">@Html.EditorFor(modelItem => item.productList)</div>*@
+
+
+                </td>
+            </tr>
+
+        }
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

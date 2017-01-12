@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebShop1.Models;
@@ -237,6 +238,7 @@ namespace WebShopV1.Controllers
             order.orderDate = DateTime.Now;
             order.totalCost = Convert.ToInt32(totalCost);
             order.totalCount = total;
+            order.customerId = customer.Id.ToString();
 
 
             db.Persons.AddOrUpdate(
@@ -249,7 +251,7 @@ namespace WebShopV1.Controllers
                   adress = customer.adress
               }
             );
-
+            db.SaveChanges();
             var newCustomer = db.Persons.Where(p => p.userId == customer.userId).FirstOrDefault();
             newCustomer.orderHistory.Add(order);
           
@@ -300,13 +302,45 @@ namespace WebShopV1.Controllers
             return Json("File Saved", JsonRequestBehavior.AllowGet);
         }
 
-        //public ActionResult UserHistoryList()
-        //{
-        //    string currentUserId = User.Identity.GetUserId();
-        //    db.Persons.Where
-        //    return Json(history, JsonRequestBehavior.AllowGet);
-        //}
+        public ActionResult UserProfile()
+        {
+            string currentUserId = User.Identity.GetUserId();
+            var theCustomer = db.Persons.Where(p => p.userId == currentUserId).FirstOrDefault();
+            ViewBag.orderHistory = theCustomer.orderHistory;
+            ViewBag.cus = theCustomer;
 
+            //return Json(result, JsonRequestBehavior.AllowGet);
+            return View("UserProfile");
+        }
+
+
+        public ActionResult EditProfile(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.Persons.Find(Id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProfile([Bind(Include = "Id,userId,firstName,lastName,adress,email")] Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("UserProfile");
+            }
+            return View(customer);
+        }
 
         //public JsonResult PdfSharpConvert()
         //{
@@ -335,11 +369,7 @@ namespace WebShopV1.Controllers
         //    return Json("File Saved", JsonRequestBehavior.AllowGet);
 
         //}
-
-
+        
     }
-
-
-
-
+    
 }
