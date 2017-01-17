@@ -58,7 +58,8 @@
             <td>
                 @Html.ActionLink("Edit", "EditOrderhistory", new { id = item.Id }) |
                 @Html.ActionLink("Details", "DetailsOrderhistory", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteOrderByAdmin?Id=@item.Id" class="delLink" style="color:red;">Delete</a></span>
             </td>
             <td>
                 @*<div style="display: none;">@Html.EditorFor(modelItem => item.productList)</div>*@

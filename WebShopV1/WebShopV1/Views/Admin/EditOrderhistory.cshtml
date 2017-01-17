@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "EditOrderhistory";
+    var id = ViewBag.modelId;
 }
 
 <h2>EditOrderhistory</h2>
@@ -33,14 +34,14 @@
         </div>
 
         @Html.HiddenFor(model => model.customerId)
-        @Html.HiddenFor(model => model.productList)
+        @*@Html.HiddenFor(model => model.productList)*@
 
         @*<div style="display: none;">@Html.EditorFor(model => model.productList)</div>*@
 
-        @for(int i = 0; i < Model.productList.Count; i++)
+        @*@for(int i = 0; i < Model.productList.Count; i++)
         {
         @Html.HiddenFor(model => model.productList[i])
-        }
+        }*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.orderDate, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -59,5 +60,6 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Users")
+    @Html.ActionLink("Back to List", "UsersDetailAdmin", new { Id = id })
+
 </div>

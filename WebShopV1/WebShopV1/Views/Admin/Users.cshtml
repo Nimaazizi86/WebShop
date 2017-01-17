@@ -30,7 +30,7 @@
 
             <td>
                 @*some actoin links and their methods to call and also send the id of the course that is selected to the method*@
-                <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteUserByAdmin?RoleName=@user.UserName" class="delLink" style="color:red;">Delete</a></span> |
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteUserByAdmin?Id=@user.Id" class="delLink" style="color:red;">Delete</a></span> |
                 @Html.ActionLink("Details", "UsersDetailAdmin", new { Id = @user.Id })
             </td>
         </tr>

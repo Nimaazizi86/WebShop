@@ -68,7 +68,7 @@ namespace WebShopV1.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.modelId = order.customerId;
             return View(order);
         }
 
@@ -77,7 +77,9 @@ namespace WebShopV1.Controllers
         public ActionResult EditOrderhistory([Bind(Include = "Id,totalCost,totalCount,customerId,orderDate")] Order order)
         {
             //var test = db.Persons.Include(o => o.orderHistory).ToList();
-
+            var thisOrder = db.DetailInfos.Where(p => p.Id == order.Id).FirstOrDefault();
+            var list = thisOrder.productList;
+            order.productList = list;
             if (ModelState.IsValid)
             {
                 //var result = test.FirstOrDefault(x => x.Id == order.Id);
@@ -92,7 +94,7 @@ namespace WebShopV1.Controllers
 
                 var thisUser = db.Persons.Where(p => p.Id.ToString() == order.customerId).FirstOrDefault();
 
-                return RedirectToAction("UsersDetailAdmin",new { Id = thisUser.userId });
+                return RedirectToAction("UsersDetailAdmin",new { Id = order.customerId });
             }
             return View(order);
         }
@@ -104,21 +106,46 @@ namespace WebShopV1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Order order = db.DetailInfos.Find(Id);
+
+
+            //var test = db.DetailInfos.Include(o => o.customerId).SingleOrDefault(x => x.Id == Id);
             if (order == null)
             {
                 return HttpNotFound();
             }
+            var thisUser = db.Persons.Where(p => p.Id.ToString() == order.customerId).FirstOrDefault();
+            //return RedirectToAction("UsersDetailAdmin", new { Id = thisUser.userId });
+            //var test = db.Persons.Include(o => o.orderHistory).ToList();
+            ViewBag.modelId = order.customerId;
+
             return View(order);
         }
 
-        public ActionResult DeleteUserByAdmin(int? Id)
+        public ActionResult DeleteUserByAdmin(string Id)
         {
-            Product product = db.Products.Find(Id);
-            db.Products.Remove(product);
+            Customer user = db.Persons.Where(p => p.userId == Id).FirstOrDefault();
+            db.Persons.Remove(user);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Users");
         }
 
+        public ActionResult DeleteOrderByAdmin(int? Id)
+        {
+            Order order = db.DetailInfos.Find(Id);
+            var id = order.customerId;
+            db.DetailInfos.Remove(order);
+            db.SaveChanges();
+            return RedirectToAction("UsersDetailAdmin", new { Id = id });
+        }
+
+        public ActionResult DeleteProductOrderByAdmin(int? Id)
+        {
+            Order order = db.DetailInfos.Find(Id);
+            var id = order.customerId;
+            db.DetailInfos.Remove(order);
+            db.SaveChanges();
+            return RedirectToAction("UsersDetailAdmin", new { Id = id });
+        }
 
         [AllowAnonymous]
         public JsonResult GetStatus()

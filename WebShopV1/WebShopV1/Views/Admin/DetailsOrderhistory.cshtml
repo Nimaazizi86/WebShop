@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "DetailsOrderhistory";
+    var id = ViewBag.modelId;
 }
 
 <h2>DetailsOrderhistory</h2>
@@ -83,6 +84,9 @@
                     @Html.ActionLink("Edit", "EditOrderhistory", new { id = item.Id })
                 </td>
                 <td>
+                    <span onclick="return confirm('Are you sure to delete?')"><a href="/Admin/DeleteProductOrderByAdmin?Id=@item.Id" class="delLink" style="color:red;">Delete</a></span>
+                </td>
+                <td>
                     @*<div style="display: none;">@Html.EditorFor(modelItem => item.productList)</div>*@
 
 
@@ -94,5 +98,5 @@
     </table>
 </div>
 <p>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "UsersDetailAdmin", new { Id = id })
 </p>

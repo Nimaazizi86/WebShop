@@ -98,6 +98,11 @@ namespace WebShopV1.Controllers
             var storeInfo = db.Products.ToList();
 
             string sessionToString = (string)Session["order"];
+            if (sessionToString == null)
+            {
+                return Json("ERROR", JsonRequestBehavior.AllowGet);
+            }
+
             var spliter = sessionToString.Split(',').ToList();
             List<Product> cartList = new List<Product>();
 
@@ -123,8 +128,7 @@ namespace WebShopV1.Controllers
 
                 string sessionToString = (string)Session["order"];
                 var spliter = sessionToString.Split(',').ToList();
-
-                spliter.RemoveAll(u => u.Contains(testId));
+                spliter.Remove(testId);
 
                 string total = spliter.Count().ToString();
                 decimal totalCost = 0;
@@ -238,34 +242,58 @@ namespace WebShopV1.Controllers
             order.orderDate = DateTime.Now;
             order.totalCost = Convert.ToInt32(totalCost);
             order.totalCount = total;
-            order.customerId = customer.Id.ToString();
+            order.customerId = customer.userId.ToString();
+
+            var existCustomer = db.Persons.FirstOrDefault(p => p.userId == customer.userId);
+            if (existCustomer == null)
+            {
+                existCustomer = new Customer();
+                existCustomer.userId = customer.userId;
+                existCustomer.firstName = customer.firstName;
+                existCustomer.lastName = customer.lastName;
+                existCustomer.email = customer.email;
+                existCustomer.adress = customer.adress;
+                db.Persons.Add(existCustomer);
+            }
+            else
+            {
+                existCustomer.firstName = customer.firstName;
+                existCustomer.lastName = customer.lastName;
+                existCustomer.email = customer.email;
+                existCustomer.adress = customer.adress;
+                db.Entry(existCustomer).State = EntityState.Modified;
+            }
 
 
-            db.Persons.AddOrUpdate(
-              p => p.userId,
-              new Customer {
-                  userId = customer.userId,
-                  firstName = customer.firstName,
-                  lastName = customer.lastName,
-                  email = customer.email,
-                  adress = customer.adress
-              }
-            );
+            //db.Persons.AddOrUpdate(
+            //  p => p.userId,
+            //  new Customer
+            //  {
+            //      userId = customer.userId,
+            //      firstName = customer.firstName,
+            //      lastName = customer.lastName,
+            //      email = customer.email,
+            //      adress = customer.adress
+            //  }
+            //);
+
+
             db.SaveChanges();
-            var newCustomer = db.Persons.Where(p => p.userId == customer.userId).FirstOrDefault();
+            //var newCustomer = db.Persons.Where(p => p.userId == customer.userId).FirstOrDefault();
+            var newCustomer = db.Persons.FirstOrDefault(p => p.userId == customer.userId);
             newCustomer.orderHistory.Add(order);
           
-            db.DetailInfos.Add(order);
+            //db.DetailInfos.Add(order);
 
             //db.Persons.Add(customer);
             db.SaveChanges();
            
             var result = new { order = order.productList , cus = customer };
+            Session.Abandon();
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
-
-
+        
         public ActionResult SaveFile()
         {
             string strPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
@@ -312,7 +340,6 @@ namespace WebShopV1.Controllers
             //return Json(result, JsonRequestBehavior.AllowGet);
             return View("UserProfile");
         }
-
 
         public ActionResult EditProfile(int? Id)
         {
